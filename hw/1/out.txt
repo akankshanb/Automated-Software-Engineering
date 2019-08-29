@@ -1,1 +1,20 @@
-
+MU match at index:  99 for:  438.92000000000013  and cached:  438.92000000000013
+SD match at index:  99 for:  438.92000000000013  and cached:  438.92000000000013
+MU match at index:  89 for:  432.12222222222226  and cached:  432.12222222222226
+SD match at index:  89 for:  432.12222222222226  and cached:  432.12222222222226
+MU match at index:  79 for:  417.5625  and cached:  417.5625
+SD match at index:  79 for:  417.5625  and cached:  417.5625
+MU match at index:  69 for:  414.3  and cached:  414.3
+SD match at index:  69 for:  414.3  and cached:  414.3
+MU match at index:  59 for:  414.0833333333333  and cached:  414.0833333333333
+SD match at index:  59 for:  414.0833333333333  and cached:  414.0833333333333
+MU match at index:  49 for:  396.69999999999993  and cached:  396.69999999999993
+SD match at index:  49 for:  396.69999999999993  and cached:  396.69999999999993
+MU match at index:  39 for:  389.7  and cached:  389.70000000000005
+SD match at index:  39 for:  389.7  and cached:  389.70000000000005
+MU match at index:  29 for:  395.4333333333333  and cached:  395.43333333333334
+SD match at index:  29 for:  395.4333333333333  and cached:  395.43333333333334
+MU match at index:  19 for:  417.0499999999999  and cached:  417.05
+SD match at index:  19 for:  417.0499999999999  and cached:  417.05
+MU match at index:  9 for:  464.49999999999983  and cached:  464.5
+SD match at index:  9 for:  464.49999999999983  and cached:  464.5
