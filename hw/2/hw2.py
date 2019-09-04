@@ -4,85 +4,118 @@ import csv
 
 class Tbl:
     header = [] 
-    list_row = []
+    row_list = []
     col_list = []
+    invalid_cols = []
     def __init__(self,header):
         self.header = header
-        for i in header:
-            c = Col(i)
-            self.col_list.append(c)
+        column_cnt = 0
+        for index, header_val in enumerate(header):
+            if not "?" in header_val:
+                col_obj = Col(column_cnt + 1, header_val)
+                self.col_list.append(col_obj)
+            else:
+                self.invalid_cols.append(index)
 
-    def addRowAndCol(self,row_list):
+    def AddRowAndCol(self,row_list):
         row = Row(row_list)
-        self.list_row.append(row)
-        #print(self.list_row)
-        self.updateCol(row_list)
+        self.row_list.append(row)
+        self.UpdateCol(row_list)
             
 
-    def updateCol(self,num_list):
+    def UpdateCol(self,num_list):
         for index,num in enumerate(num_list):
             n = Num(self.col_list[index])
-            n.NumAdd(float(num))
-        #self.col_list[0].printCol()
+            try:
+                n.NumAdd(float(num))
+            except:
+                print("You dont want to add strings now.. do you??")
+    
+    def PrintCols(self):
+        for index, column in enumerate(self.col_list):
+            print("|   ", index+1)
+            column.PrintCol()
+
+    def PrintRows(self):
+        for index, row in enumerate(self.row_list):
+            print("|   ", index+1)
+            row.PrintRow()
+
 class Col():
     cnt = 0
     txt = None
     mu = m2 = sd = 0
     lo = math.pow(10, 32)
     hi = -1 * lo
+    add = "Num1"
+    col = 1
+    oid = 0
 
-    def __init__(self, txt):
+    def __init__(self, col_index, txt):
         self.txt = txt
+        self.col = col_index + 1
 
     # def addNum(self, input_num):
         # self.cnt += 1
     #     self.col_list.append(input_num)
-    def printCol(self):
-        print("Count: ", self.cnt, "MU: ", self.mu, "HI: ", self.hi)
+
+    def PrintCol(self):
+        print("|    |   add: ", self.add)
+        print("|    |   col: ", self.col)
+        print("|    |   hi: ", self.hi)
+        print("|    |   lo: ", self.lo)
+        print("|    |   m2: ", self.m2)
+        print("|    |   mu: ", self.mu)
+        print("|    |   n: ", self.cnt)
+        print("|    |   oid: ", self.oid)
+        print("|    |   sd: ", self.sd)
+        print("|    |   txt: ", self.txt)
+
 class Row():
     def __init__(self, row):
         self.row = row
-    
+    def PrintRow(self):
+        print()
 class Num(Col):
-    # def __init__():
-    #     super()
+    def __init__(self, col):
+        self.col = col
     # mu = m2 = sd = 0
     # lo = math.pow(10, 32)
     # hi = -1 * lo
         
     def NumAdd(self, input_number):
-        self.cnt = self.cnt + 1
-        if input_number < self.lo:
-            self.lo = input_number
-        if input_number > self.hi:
-            self.hi = input_number
-        d = input_number - self.mu
+        self.col.cnt = self.col.cnt + 1
+        if input_number < self.col.lo:
+            self.col.lo = input_number
+        if input_number > self.col.hi:
+            self.col.hi = input_number
+        d = input_number - self.col.mu
         # For Mean
-        self.mu += d/self.cnt
-        self.m2 += d * (input_number - self.mu)
+        self.col.mu += d/self.col.cnt
+        self.col.m2 += d * (input_number - self.col.mu)
         # For Standard deviation
-        if self.m2 < 0 or self.cnt < 2:
-            self.sd = 0
+        if self.col.m2 < 0 or self.col.cnt < 2:
+            self.col.sd = 0
         else :   
-            self.sd = math.pow(self.m2/(self.cnt-1), 0.5)
-        self.printCol()
-        return self.mu, self.sd
+            self.col.sd = math.pow(self.col.m2/(self.col.cnt-1), 0.5)
+        # self.PrintCol()
+        return self.col.mu, self.col.sd
 
     def NumRemove(self, input_number):
-        if self.cnt < 2:
-            self.sd = 0
-            return self.mu, self.sd
-        self.cnt = self.cnt - 1
-        d = input_number - self.mu
+        if self.col.cnt < 2:
+            self.col.sd = 0
+            return self.col.mu, self.col.sd
+        self.col.cnt = self.col.cnt - 1
+        d = input_number - self.col.mu
         # For Mean
-        self.mu -= d/self.cnt
-        self.m2 -= d * (input_number - self.mu)
+        self.col.mu -= d/self.col.cnt
+        self.col.m2 -= d * (input_number - self.col.mu)
         # For Standard deviation
-        if self.m2 < 0 or self.cnt < 2:
-            self.sd = 0
+        if self.col.m2 < 0 or self.col.cnt < 2:
+            self.col.sd = 0
         else:   
-            self.sd = math.pow(self.m2/(self.cnt - 1), 0.5)
-        return self.mu, self.sd
+            self.col.sd = math.pow(self.col.m2/(self.col.cnt - 1), 0.5)
+        return self.col.mu, self.col.sd
 
 class Sym(Col):
     pass
@@ -90,12 +123,6 @@ class Some(Col):
     pass
 
 def main():
-    #cnt = 100
-    #N = Num()
-    #input_numbers = []
-
-    # mu_list = []
-    # sd_list = []
     
     with open('table.csv','r') as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
@@ -105,38 +132,7 @@ def main():
                 t = Tbl(row)
                 index_flag = False
             else:
-                t.addRowAndCol(row)
-            
-        
-
-    
-    # sample_string = "1,2,3,4,5"
-    # sample_list = sample_string.split(",")
-    # print(sample_list)
-    # for i in range(cnt):
-    #     input_numbers.append(random.randint(10, 1000))
-
-    # for index, input_number in enumerate(input_numbers):
-    #     mu, sd = N.NumAdd(input_number)
-    #     if (index + 1)%10 == 0:
-    #         mu_list.append(mu)
-    #         sd_list.append(sd)
-    
-    # for index in range(cnt - 1, 8, -1):
-    #     if (index + 1)%10 == 0:
-            
-    #         mu_compare = mu_list.pop()
-    #         if round(mu_compare, 4) == round(mu, 4):
-    #             print("MU match at index: ", index, "for: ", mu, " and cached: ", mu_compare)
-    #         else:
-    #             print("MU mismatch at index: ", index, "for: ", mu, " and cached: ", mu_compare)
-
-    #         sd_compare = sd_list.pop()
-    #         if round(sd_compare, 4) == round(sd, 4):
-    #             print("SD match at index: ", index, "for: ", mu, " and cached: ", mu_compare)
-    #         else:
-    #             print("SD mismatch at index: ", index, "for: ", sd, " and cached: ", sd_compare)
-
-    #     mu, sd = N.NumRemove(input_numbers[index])
+                t.AddRowAndCol(row)
+        t.PrintCols()
 if __name__ == '__main__':
     main()
