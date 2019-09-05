@@ -14,7 +14,7 @@ Consists of 2 files:
 1. hw2.py
 2. cleanData.py
 
-Running Instructions:
-output1 > Run cleanData.py
-output2 > Run cleanData.py
-output3 > Run hw2.py
+#### Running Instructions:
+output1 > Run cleanData.py <br>
+output2 > Run cleanData.py <br>
+output3 > Run hw2.py <br>
