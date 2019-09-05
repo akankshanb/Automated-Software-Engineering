@@ -31,6 +31,7 @@ class Tbl:
     
     def PrintCols(self):
         for index, column in enumerate(self.col_list):
+            print("t.cols")
             print("|   ", index+1)
             column.PrintCol()
 
@@ -53,10 +54,6 @@ class Col():
         self.txt = txt
         self.col = col_index + 1
 
-    # def addNum(self, input_num):
-        # self.cnt += 1
-    #     self.col_list.append(input_num)
-
     def PrintCol(self):
         print("|    |   add: ", self.add)
         print("|    |   col: ", self.col)
@@ -78,9 +75,6 @@ class Row():
 class Num(Col):
     def __init__(self, col):
         self.col = col
-    # mu = m2 = sd = 0
-    # lo = math.pow(10, 32)
-    # hi = -1 * lo
         
     def NumAdd(self, input_number):
         self.col.cnt = self.col.cnt + 1
@@ -122,18 +116,7 @@ class Some(Col):
     pass
 
 def main():
-    
-    # with open('table.csv','r') as csvfile:
-    #     readCSV = csv.reader(csvfile, delimiter=',')
-    #     index_flag = True
-    #     for row in readCSV:
-    #         if(index_flag==True):
-    #             t = Tbl(row)
-    #             index_flag = False
-    #         else:
-    #             t.AddRowAndCol(row)
-    #     t.PrintCols()
-    s="""
+    """s=
         $cloudCover, $temp, ?$humid, $wind,  $playHours
         100,        68,    80,    0,    3   # comments
         0,          85,    85,    0,    0

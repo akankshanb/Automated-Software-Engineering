@@ -53,7 +53,7 @@ def fromString(s):
 
 if __name__=="__main__":
     f = "table.csv"
-    s="""
+    """s=
     $cloudCover, $temp, ?$humid, $wind,  $playHours
     100,        23,    10,    0,    3  # comments
    
@@ -74,7 +74,7 @@ if __name__=="__main__":
     for index, lst in enumerate(file(f)):
         if index == 0:
             len_first = len(lst)
-        if len(lst) > len_first:
+        if len(lst) != len_first:
             print("skipping line: ", index)
         else:
             print(lst)
