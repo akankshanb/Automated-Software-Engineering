@@ -1,6 +1,6 @@
-$cloudCover,$temp,$humid,$wind,$playHours
+$cloudCover,$tpythonemp,?$humid,$wind,$playHours
   100, 68, 80,  0,   3   
-  0,   85, 85,  0,   0
+  0,   85, ?85,  0,   0
   0,   80, 90,  10,  0
   60,  83, 86,  0,   4
   100, 70, 96,  0,   3

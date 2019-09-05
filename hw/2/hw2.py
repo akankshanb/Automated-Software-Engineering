@@ -1,6 +1,7 @@
 import math
 import random
 import csv
+import cleanData
 
 class Tbl:
     header = [] 
@@ -9,13 +10,10 @@ class Tbl:
     invalid_cols = []
     def __init__(self,header):
         self.header = header
-        column_cnt = 0
         for index, header_val in enumerate(header):
-            if not "?" in header_val:
-                col_obj = Col(column_cnt + 1, header_val)
-                self.col_list.append(col_obj)
-            else:
-                self.invalid_cols.append(index)
+            col_obj = Col(index, header_val)
+            self.col_list.append(col_obj)
+            
 
     def AddRowAndCol(self,row_list):
         row = Row(row_list)
@@ -76,6 +74,7 @@ class Row():
         self.row = row
     def PrintRow(self):
         print()
+
 class Num(Col):
     def __init__(self, col):
         self.col = col
@@ -124,15 +123,41 @@ class Some(Col):
 
 def main():
     
-    with open('table.csv','r') as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',')
-        index_flag = True
-        for row in readCSV:
-            if(index_flag==True):
-                t = Tbl(row)
-                index_flag = False
-            else:
-                t.AddRowAndCol(row)
-        t.PrintCols()
+    # with open('table.csv','r') as csvfile:
+    #     readCSV = csv.reader(csvfile, delimiter=',')
+    #     index_flag = True
+    #     for row in readCSV:
+    #         if(index_flag==True):
+    #             t = Tbl(row)
+    #             index_flag = False
+    #         else:
+    #             t.AddRowAndCol(row)
+    #     t.PrintCols()
+    s="""
+        $cloudCover, $temp, ?$humid, $wind,  $playHours
+        100,        68,    80,    0,    3   # comments
+        0,          85,    85,    0,    0
+        0,          80,    90,    10,   0
+        60,         83,    86,    0,    4
+        100,        70,    96,    0,    3
+        100,        65,    70,    20,   0
+        70,         64,    65,    15,   5
+        0,          72,    95,    0,    0
+        0,          69,    70,    0,    4
+        80,          75,    80,    0,    3  
+        0,          75,    70,    18,   4
+        60,         72,    90,    10,   4
+        40,         81,    75,    0,    2    
+        100,        71,    91,    15,   0
+        """
+    f = "table.csv"
+    index_flag = True
+    for row in cleanData.file(f):
+        if(index_flag==True):
+            t = Tbl(row)
+            index_flag = False
+        else:
+            t.AddRowAndCol(row)
+    t.PrintCols()
 if __name__ == '__main__':
     main()
