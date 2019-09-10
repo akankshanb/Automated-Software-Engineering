@@ -62,7 +62,14 @@ class Tbl:
             row.PrintRow()
 
 class Abcd():
-    pass
+    a, b, c, d = {}
+    def __init__():
+        pass
+    def Abcd1():
+        pass
+    def AbcdReport():
+        pass
+
 class Col():
     cnt = 0
     txt = None
@@ -168,7 +175,7 @@ class Sym(Col):
 
 class Some(Col):
     pass
-
+    
 def main():
     """s=
         $cloudCover, $temp, ?$humid, $wind,  $playHours
