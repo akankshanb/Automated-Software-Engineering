@@ -62,11 +62,47 @@ class Tbl:
             row.PrintRow()
 
 class Abcd():
-    a, b, c, d = {}
+    known = None
+    a = b = c = d = None
+    rx = ""
+    data = ""
+    yes = no = None
     def __init__():
-        pass
-    def Abcd1():
-        pass
+        self.known = {}
+        self.a = self.b = self.c = self.d = {}
+        self.rx = self.rx if self.rx else "rx"
+        self.data = self.data if self.data else "data"
+        self.yes = self.no = 0
+
+    def Abcd1(want, got, x):
+        # want
+        self.known[want] += 1 if want in self.known else 1
+        if self.known[want] == 1:
+            self.a[want] = self.yes + self.no
+            
+        # got
+        self.known[got] += 1 if got in self.known else 1
+        if self.known[got] == 1:
+            self.a[got] = self.yes + self.no
+        if want == got:
+            self.yes += 1
+        else:
+            self.no += 1
+
+        # check for abcd values
+        for x in known:
+            if want == x:
+                if want == got:
+                    self.d += 1
+                else:
+                    self.b += 1
+            else:
+                if want == got:
+                    self.c += 1
+                else:
+                    self.a += 1
+
+
     def AbcdReport():
         pass
 
