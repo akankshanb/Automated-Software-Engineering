@@ -18,3 +18,13 @@ Consists of 2 files:
 output1 > Run cleanData.py <br>
 output2 > Run cleanData.py <br>
 output3 > Run hw2.py <br>
+
+### HW3
+The output file is broken into two parts on the same code:
+Output1.txt consists of part 1 of homework 3.
+Output2.txt consists of part 2 of homework 3.
+Data used is table.csv file
+
+#### Important note!
+The output in output2.txt may be different in format from expected since the code is done such a way that the columns have header calues as '?' are removed and a new table is generated all together. Thus, column indexes printed are not exact to the sample  but the logic is same and correct.
+
