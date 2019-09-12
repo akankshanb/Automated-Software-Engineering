@@ -289,23 +289,7 @@ class Some(Col):
     pass
     
 def main():
-    """s=
-        $cloudCover, $temp, ?$humid, $wind,  $playHours
-        100,        68,    80,    0,    3   # comments
-        0,          85,    85,    0,    0
-        0,          80,    90,    10,   0
-        60,         83,    86,    0,    4
-        100,        70,    96,    0,    3
-        100,        65,    70,    20,   0
-        70,         64,    65,    15,   5
-        0,          72,    95,    0,    0
-        0,          69,    70,    0,    4
-        80,          75,    80,    0,    3  
-        0,          75,    70,    18,   4
-        60,         72,    90,    10,   4
-        40,         81,    75,    0,    2    
-        100,        71,    91,    15,   0
-        """
+    # Running My for symbols in Col (output 1)
     f = "table.csv"
     index_flag = True
     for row in cleanData.file(f):
@@ -318,20 +302,15 @@ def main():
     print("\n")
     t.PrintMy()
 
-    # c = Col(0, "hello")
-    # s = Sym(c)
-    # for l in "aaaabbc":
-    #     s.SymAdd(l)
-    # print("CHECKING: ", s.SymEnt())
-
-    # abcd = Abcd()
-    # for i in range(1, 7):
-    #     abcd.Abcd1("yes", "yes")
-    # for i in range(1, 3):
-    #     abcd.Abcd1("no", "no")
-    # for i in range(1, 6):
-    #     abcd.Abcd1("maybe", "maybe")
-    # abcd.Abcd1("maybe", "no")
-    # abcd.AbcdReport()
+    # Running Abcd for prediction (output 2)
+    abcd = Abcd()
+    for i in range(1, 7):
+        abcd.Abcd1("yes", "yes")
+    for i in range(1, 3):
+        abcd.Abcd1("no", "no")
+    for i in range(1, 6):
+        abcd.Abcd1("maybe", "maybe")
+    abcd.Abcd1("maybe", "no")
+    abcd.AbcdReport()
 if __name__ == '__main__':
     main()
