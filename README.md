@@ -20,7 +20,7 @@ output2 > Run cleanData.py <br>
 output3 > Run hw2.py <br>
 
 ### HW3
-The output file is broken into two parts on the same code:
+The output file is broken into two parts on the same code: <br>
 Output1.txt consists of part 1 of homework 3. <br>
 Output2.txt consists of part 2 of homework 3. <br>
 Data used is table.csv file
