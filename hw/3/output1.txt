@@ -1,0 +1,60 @@
+t.cols
+|    1
+|    |   add:  Sym1
+|    |   col:  1
+|    |   cnt:  {'rainy': 5, 'sunny': 5, 'overcast': 4}
+|    |   mode:  sunny
+|    |   most:  5
+|    |   n:  14
+|    |   oid:  2
+|    |   txt:  outlook
+t.cols
+|    2
+|    |   add:  Num1
+|    |   col:  2
+|    |   hi:  96.0
+|    |   lo:  65.0
+|    |   m2:  1375.2142857142858
+|    |   mu:  81.64285714285715
+|    |   sd:  10.285218242007035
+|    |   n:  14
+|    |   oid:  3
+|    |   txt:  <humid
+t.cols
+|    3
+|    |   add:  Sym1
+|    |   col:  3
+|    |   cnt:  {'FALSE': 8, 'TRUE': 6}
+|    |   mode:  FALSE
+|    |   most:  8
+|    |   n:  14
+|    |   oid:  4
+|    |   txt:  wind
+t.cols
+|    4
+|    |   add:  Sym1
+|    |   col:  4
+|    |   cnt:  {'yes': 9, 'no': 5}
+|    |   mode:  yes
+|    |   most:  9
+|    |   n:  14
+|    |   oid:  5
+|    |   txt:  !play
+
+
+t.my
+|   
+goals
+|    [2, 4]
+|   
+xs
+|    [1, 3]
+|   
+nums
+|    [2]
+|   
+syms
+|    [1, 3, 4]
+|   
+weights
+|    [{1: -1}]

@@ -2,6 +2,8 @@ import math
 import random
 import csv
 import cleanData
+from prettytable import PrettyTable 
+ptable = PrettyTable()
 
 class Tbl:
     header = [] 
@@ -29,11 +31,13 @@ class Tbl:
     def UpdateCol(self,row_list):
         for index,num in enumerate(row_list):
             try:
-                numToAdd = float(self.col_list[index])
+                numToAdd = float(num)
                 n = Num(self.col_list[index])
                 n.NumAdd(numToAdd)
             except:
-                sym = Sym(self.col_list[index])
+                symToAdd = num
+                s = Sym(self.col_list[index])
+                s.SymAdd(symToAdd)
     
     def PrintCols(self):
         for index, column in enumerate(self.col_list):
@@ -42,7 +46,6 @@ class Tbl:
             column.PrintCol()
 
     def CheckHeader(self, col_index, header_val):
-        print("VAL: ", header_val)
         if any(x in header_val for x in ["<", ">", "$"]):
             if "<" in header_val:
                 self.my["weights"].append({ col_index: -1})
@@ -55,7 +58,12 @@ class Tbl:
             self.my["xs"].append(col_index + 1)
         
     def PrintMy(self):
-        print(self.my)
+        print("t.my")
+        for my_val in self.my:
+            print("|   ")
+            print(my_val)
+            print("|   ", self.my[my_val])
+            
     def PrintRows(self):
         for index, row in enumerate(self.row_list):
             print("|   ", index+1)
@@ -66,22 +74,59 @@ class Abcd():
     a = b = c = d = None
     rx = ""
     data = ""
+    # output_types = {}
     yes = no = None
-    def __init__():
+
+    def __init__(self):
         self.known = {}
-        self.a = self.b = self.c = self.d = {}
+        self.a = {}
+        self.b = {}
+        self.c = {}
+        self.d = {}
         self.rx = self.rx if self.rx else "rx"
         self.data = self.data if self.data else "data"
+        # self.output_types.yes = 0
+        # self.output_types.no = 0
         self.yes = self.no = 0
 
-    def Abcd1(want, got, x):
+    def Abcd1(self, want, got):
+        # if not want in self.output_types:
+        #     self.output_types[want] = 1
+        # if not got in self.output_types:
+        #     self.output_types[got] = 1
+
+        if not want in self.a:
+            self.a[want] = 0
+        if not want in self.b:
+            self.b[want] = 0
+        if not want in self.c:
+            self.c[want] = 0
+        if not want in self.d:
+            self.d[want] = 0
+        if not got in self.a:
+            self.a[got] = 0
+        if not got in self.b:
+            self.b[got] = 0
+        if not got in self.c:
+            self.c[got] = 0
+        if not got in self.d:
+            self.d[got] = 0
+
         # want
-        self.known[want] += 1 if want in self.known else 1
+        if want in self.known:
+            self.known[want] += 1
+        else:
+            self.known[want] = 1
+
         if self.known[want] == 1:
             self.a[want] = self.yes + self.no
             
         # got
-        self.known[got] += 1 if got in self.known else 1
+        if got in self.known:
+            self.known[got] += 1
+        else:
+            self.known[got] = 1
+
         if self.known[got] == 1:
             self.a[got] = self.yes + self.no
         if want == got:
@@ -90,21 +135,43 @@ class Abcd():
             self.no += 1
 
         # check for abcd values
-        for x in known:
+        for x in self.known:
             if want == x:
                 if want == got:
-                    self.d += 1
+                    self.d[x]+=1
                 else:
-                    self.b += 1
+                    self.b[x]+=1
             else:
-                if want == got:
-                    self.c += 1
+                if x == got:
+                    self.c[x]+=1
                 else:
-                    self.a += 1
+                    self.a[x]+=1
 
+    def AbcdReport(self):
+        ptable.field_names = ["db", "rx", "num", "a", "b", "c", "d", "acc", "pre", "pd", "pf", "f", "g", "class"]
 
-    def AbcdReport():
-        pass
+        for x in self.known:
+            pd = pf = pn = prec = g = f = acc = 0
+            a = self.a[x]
+            b = self.b[x]
+            c = self.c[x]
+            d = self.d[x]
+            
+            if b+d > 0:
+                pd = d/(b+d)
+            if a+c > 0:
+                pf = c/(a+c)
+                pn = (b+d)/(a+c)
+            if c+d > 0:
+                prec = d/(c+d)
+            if 1-pf+pd>0:
+                g = (2*(1-pf)*pd)/(1-pf+pd)
+            if prec+pd > 0:
+                f = 2*(prec*pd)/(prec+pd)
+            if self.yes + self.no > 0:
+                acc = self.yes/(self.yes+self.no)
+            ptable.add_row([self.data, self.rx, (self.yes+self.no), a, b, c, d, round(acc, 2), round(prec, 2), round(pd, 2), round(pf, 2), round(f, 2), round(g, 2), x])
+        print(ptable)
 
 class Col():
     cnt = 0
@@ -117,26 +184,36 @@ class Col():
     # goal = None
     weight = 1
     col = 1
-    oid = 0
+    oid = 1
     
+    sym_cnt = None
     mode = ""
     most = 0
     
     def __init__(self, col_index, txt):
         self.txt = txt
+        self.sym_cnt = {}
+        self.oid = col_index + 1
         self.col = col_index + 1
 
 
     def PrintCol(self):
         print("|    |   add: ", self.add)
         print("|    |   col: ", self.col)
-        print("|    |   hi: ", self.hi)
-        print("|    |   lo: ", self.lo)
-        print("|    |   m2: ", self.m2)
-        print("|    |   mu: ", self.mu)
+        if self.add is "Num1":
+            print("|    |   hi: ", self.hi)
+            print("|    |   lo: ", self.lo)
+            print("|    |   m2: ", self.m2)
+            print("|    |   mu: ", self.mu)
+            print("|    |   sd: ", self.sd)
+            
+        if self.add is "Sym1":
+            print("|    |   cnt: ", self.sym_cnt)
+            print("|    |   mode: ", self.mode)
+            print("|    |   most: ", self.most)
+
         print("|    |   n: ", self.cnt)
-        print("|    |   oid: ", self.oid)
-        print("|    |   sd: ", self.sd)
+        print("|    |   oid: ", self.oid+1)
         print("|    |   txt: ", self.txt)
 
 class Row():
@@ -148,7 +225,7 @@ class Row():
 class Num(Col):
     def __init__(self, col):
         self.col = col
-        self.add = "Num1"
+        self.col.add = "Num1"
         
     def NumAdd(self, input_number):
         self.col.cnt = self.col.cnt + 1
@@ -185,18 +262,17 @@ class Num(Col):
         return self.col.mu, self.col.sd
 
 class Sym(Col):
-    sym_cnt = {}
     def __init__(self, col):
         self.col = col
-        self.add = "Sym1"
+        self.col.add = "Sym1"
     
     def SymAdd(self, input_symbol):
         self.col.cnt = self.col.cnt + 1
-        if input_symbol in self.sym_cnt:
-            self.sym_cnt[input_symbol] = self.sym_cnt[input_symbol] + 1
+        if input_symbol in self.col.sym_cnt:
+            self.col.sym_cnt[input_symbol] = self.col.sym_cnt[input_symbol] + 1
         else:
-            self.sym_cnt[input_symbol] = 1
-        tmp = self.sym_cnt[input_symbol]
+            self.col.sym_cnt[input_symbol] = 1
+        tmp = self.col.sym_cnt[input_symbol]
         if tmp > self.col.most:
             self.col.most = tmp 
             self.col.mode = input_symbol
@@ -238,11 +314,24 @@ def main():
             index_flag = False
         else:
             t.AddRowAndCol(row)
+    t.PrintCols()
+    print("\n")
     t.PrintMy()
+
     # c = Col(0, "hello")
     # s = Sym(c)
     # for l in "aaaabbc":
     #     s.SymAdd(l)
     # print("CHECKING: ", s.SymEnt())
+
+    # abcd = Abcd()
+    # for i in range(1, 7):
+    #     abcd.Abcd1("yes", "yes")
+    # for i in range(1, 3):
+    #     abcd.Abcd1("no", "no")
+    # for i in range(1, 6):
+    #     abcd.Abcd1("maybe", "maybe")
+    # abcd.Abcd1("maybe", "no")
+    # abcd.AbcdReport()
 if __name__ == '__main__':
     main()
