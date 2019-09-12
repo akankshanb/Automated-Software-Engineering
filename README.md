@@ -21,8 +21,8 @@ output3 > Run hw2.py <br>
 
 ### HW3
 The output file is broken into two parts on the same code:
-Output1.txt consists of part 1 of homework 3.
-Output2.txt consists of part 2 of homework 3.
+Output1.txt consists of part 1 of homework 3. <br>
+Output2.txt consists of part 2 of homework 3. <br>
 Data used is table.csv file
 
 #### Important note!
