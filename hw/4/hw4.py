@@ -18,23 +18,16 @@ class NB:
         self.most = -10**64
     # Train and Classify class names will remain constant for all types of classifiers
     def train(self, row, lst):
-        # print("table wala")
-        # self.tbl.AddRowAndCol(lst)
-        # print(self.tbl.PrintCols())
         self.n +=1
         col_index = self.tbl.my["goals"][0]
         class_input = lst[col_index]
-        # print("class input: ", class_input)
         self.NbEnsureClassExists(class_input)
         self.class_dict[class_input].AddRowAndCol(lst)
-        # self.class_dict[class_input].norows += 1
-        # print("lst: ", lst)
 
 
     def classify(self, row, lst, guess):
         most = -10**64
         for val in self.class_dict:
-            # most = self.class_dict[val].col_list[self.class_dict[val].my["goals"][0]]
             if guess == "":
                 guess = val
             else:
@@ -47,10 +40,8 @@ class NB:
     def NbEnsureClassExists(self,class_input):
         if not class_input in self.class_dict:
             self.class_dict[class_input] = Tbl(self.tbl.header)
-            # self.class_dict[class_input].xs = self.tbl.my["xs"]
     def BayesTheorem(self, lst, val):
         goal_index = self.class_dict[val].my["goals"][0]
-        # number of yes/no = n1
         n1 = self.class_dict[val].col_list[goal_index].sym_cnt[val]
         nall = self.n
         like = (float)(n1+self.k)/ (nall + self.k* len(self.class_dict))
@@ -379,8 +370,6 @@ class Num(Col):
         return self.col.mu, self.col.sd
     
     def NumLike(self, input_number):
-        # input_number = float(input_number)
-        # print(input_number)
         variance = self.col.sd**2
         denom = (3.14159*2*variance)**0.5
         num = 2.71828**(-1*(input_number-self.col.mu)**2/(2*variance+0.0001))
