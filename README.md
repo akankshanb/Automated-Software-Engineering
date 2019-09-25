@@ -37,5 +37,6 @@ NB_output2.txt consists of output of diabetes.txt. <br>
 Data used is weathernom.csv file and diabetes.csv
 
 #### Note
-You can see from the output that the values obtained for pd, false alarms in zeroR are very low and relatively higher for Naive Bayes. This is because ZeroR does not take recall very well whereas Naive Bayes considers it.
+You can see from the output that the values obtained for pd, false alarms in zeroR are very low and relatively higher for Naive Bayes. This is because ZeroR does not take recall very well whereas Naive Bayes considers it.<br>
 
+To run the program, enable data in the main function and run the loop for the given data and classifier.
