@@ -445,13 +445,13 @@ def main():
     index_flag = True
     abcd = Abcd()
 
-    for index, row in enumerate(cleanData.file(f)):
-        if(index_flag==True):
-            z = ZeroR(row)
-            abcd.Abcds("", 4, z)
-            index_flag = False
-        else:
-            abcd.Abcds1(index, row)
+    # for index, row in enumerate(cleanData.file(f)):
+    #     if(index_flag==True):
+    #         z = ZeroR(row)
+    #         abcd.Abcds("", 4, z)
+    #         index_flag = False
+    #     else:
+    #         abcd.Abcds1(index, row)
 
     for index, row in enumerate(cleanData.file(f)):
         if(index_flag==True):
