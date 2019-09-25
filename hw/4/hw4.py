@@ -5,6 +5,71 @@ import cleanData
 from prettytable import PrettyTable 
 ptable = PrettyTable()
 
+class NB:
+    tbl = None
+    n = None
+    class_dict= None
+    k = 1
+    most = None
+    def __init__(self, header):
+        self.tbl = Tbl(header)
+        self.n = -1
+        self.class_dict = {}
+        self.most = -10**64
+    # Train and Classify class names will remain constant for all types of classifiers
+    def train(self, row, lst):
+        # print("table wala")
+        # self.tbl.AddRowAndCol(lst)
+        # print(self.tbl.PrintCols())
+        self.n +=1
+        col_index = self.tbl.my["goals"][0]
+        class_input = lst[col_index]
+        # print("class input: ", class_input)
+        self.NbEnsureClassExists(class_input)
+        self.class_dict[class_input].AddRowAndCol(lst)
+        # self.class_dict[class_input].norows += 1
+        # print("lst: ", lst)
+
+
+    def classify(self, row, lst, guess):
+        most = -10**64
+        for val in self.class_dict:
+            # most = self.class_dict[val].col_list[self.class_dict[val].my["goals"][0]]
+            if guess == "":
+                guess = val
+            else:
+                guess = guess
+            like = self.BayesTheorem(lst, val)
+            if like > most:
+                most = like
+                guess = val
+        return guess
+    def NbEnsureClassExists(self,class_input):
+        if not class_input in self.class_dict:
+            self.class_dict[class_input] = Tbl(self.tbl.header)
+            # self.class_dict[class_input].xs = self.tbl.my["xs"]
+    def BayesTheorem(self, lst, val):
+        goal_index = self.class_dict[val].my["goals"][0]
+        # number of yes/no = n1
+        n1 = self.class_dict[val].col_list[goal_index].sym_cnt[val]
+        nall = self.n
+        like = (float)(n1+self.k)/ (nall + self.k* len(self.class_dict))
+        prior = (float)(n1+self.k)/ (nall + self.k* len(self.class_dict))
+        like = math.log(like,2)
+        for c in self.class_dict[val].my["xs"]:
+            x = lst[c-1]
+            n = self.class_dict[val].col_list[c]
+            if c in self.class_dict[val].my["nums"]:
+                num = Num(n)
+                if num.NumLike(x)==0.0: 
+                    continue
+                like+= math.log(num.NumLike(x),2)
+            elif c in self.class_dict[val].my["syms"]:
+                s = Sym(n)
+                symLike = s.SymLike(x, prior)
+                like+= math.log(symLike,2)
+        return like
+
 class ZeroR:
     tbl = None
     def __init__(self, header):
@@ -18,27 +83,30 @@ class ZeroR:
         return self.tbl.col_list[col_index].mode
 
 class Tbl:
-    header = [] 
-    row_list = []
-    col_list = []
-    my = {
-        "goals": [],
-        "xs": [],
-        "nums": [],
-        "syms": [],
-        "weights": [],
-        "xsyms": [],
-        "xnums": []
-    }
+    header = None
+    row_list = None
+    col_list = None
+    my = {}
     norows = None
-
     def __init__(self,header):
+        self.row_list = []
+        self.col_list = []
+        self.my = {
+            "goals": [],
+            "xs": [],
+            "nums": [],
+            "syms": [],
+            "weights": [],
+            "xsyms": [],
+            "xnums": [],
+        }
         self.header = header
+        self.norows = 0
         for index, header_val in enumerate(header):
             self.CheckHeader(index, header_val)
             col_obj = Col(index, header_val)
             self.col_list.append(col_obj)
-        
+
     def AddRowAndCol(self,row_list):
         row = Row(row_list)
         self.row_list.append(row)
@@ -98,7 +166,6 @@ class Abcd():
     # output_types = {}
     yes = no = None
     learn = wait = train = classify = None
-
     def __init__(self):
         self.known = {}
         self.a = {}
@@ -118,6 +185,8 @@ class Abcd():
             "Classify": ""
         }
         self.wait = 4
+
+
 
     def Abcd1(self, want, got):
 
@@ -217,26 +286,33 @@ class Abcd():
 class Col():
     cnt = 0
     txt = None
-    mu = m2 = sd = 0
-    lo = math.pow(10, 32)
-    hi = -1 * lo
+    mu = m2 = sd = None
+    lo = None
+    hi = None
     add = None
     # col_type = None
     # goal = None
-    weight = 1
-    col = 1
-    oid = 1
-    
+    weight = None
+    col = None
+    oid = None
     sym_cnt = None
-    mode = ""
-    most = 0
-    
+    mode = None
+    most = None
     def __init__(self, col_index, txt):
+        self.cnt = 0
+        self.txt = None
+        self.mu = self.m2 = self.sd = 0
+        self.lo = math.pow(10, 32)
+        self.hi = -1 * self.lo
+        self.add = None
+        self.weight = 1
+        self.oid = 1
+        self.mode = ""
+        self.most = 0
         self.txt = txt
         self.sym_cnt = {}
         self.oid = col_index + 1
         self.col = col_index + 1
-
 
     def PrintCol(self):
         print("|    |   add: ", self.add)
@@ -301,6 +377,14 @@ class Num(Col):
         else:   
             self.col.sd = math.pow(self.col.m2/(self.col.cnt - 1), 0.5)
         return self.col.mu, self.col.sd
+    
+    def NumLike(self, input_number):
+        # input_number = float(input_number)
+        # print(input_number)
+        variance = self.col.sd**2
+        denom = (3.14159*2*variance)**0.5
+        num = 2.71828**(-1*(input_number-self.col.mu)**2/(2*variance+0.0001))
+        return (float)(num/(denom + 10**(-64)))
 
 class Sym(Col):
     def __init__(self, col):
@@ -321,10 +405,19 @@ class Sym(Col):
 
     def SymEnt(self):
         e = p = 0
-        for k in self.sym_cnt:
-            p = self.sym_cnt[k]/self.col.cnt
+        for k in self.col.sym_cnt:
+            p = self.col.sym_cnt[k]/self.col.cnt
             e -= p * math.log10(p)/math.log10(2)
         return e
+    
+    def SymLike(self, input_symbol, prior):
+        m=2 # Parameter set to handle low frequency cases
+        if input_symbol in self.col.sym_cnt:
+            f = self.col.sym_cnt[input_symbol]
+        else:
+            f= 0
+        # print("count: ", self.col.cnt)
+        return (float)(f + m*prior)/(self.col.cnt + m)
 
 class Some(Col):
     pass
@@ -347,19 +440,34 @@ def main():
         40,         81,    75,    0,    2    
         100,        71,    91,    15,   0
         """
-    f = "weathernom.csv"
-    # f = "diabetes.csv"
+    # f = "weathernom.csv"
+    f = "diabetes.csv"
     index_flag = True
     abcd = Abcd()
 
     for index, row in enumerate(cleanData.file(f)):
         if(index_flag==True):
             z = ZeroR(row)
-            abcd.Abcds("", 2, z)
+            abcd.Abcds("", 4, z)
             index_flag = False
         else:
             abcd.Abcds1(index, row)
-    abcd.AbcdReport() 
+
+    for index, row in enumerate(cleanData.file(f)):
+        if(index_flag==True):
+            z = NB(row)
+            abcd.Abcds("", 4, z)
+            index_flag = False
+        else:
+            abcd.Abcds1(index, row)
+    
+    print("------------")
+    if f=="weathernom.csv":
+        print("Weather data")
+    elif f=="diabetes.csv":
+        print("Diabetes data")
+    
+    abcd.AbcdReport()
 
 if __name__ == '__main__':
     main()
