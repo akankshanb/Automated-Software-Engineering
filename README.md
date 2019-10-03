@@ -28,3 +28,15 @@ Data used is table.csv file
 #### Important note!
 The output in output2.txt may be different in format from expected since the code is done such a way that the columns have header calues as '?' are removed and a new table is generated all together. Thus, column indexes printed are not exact to the sample  but the logic is same and correct.
 
+### HW4
+The output file is: <br>
+zeroR_output1.txt consists of output of weathernom.txt. <br>
+zeroR_output2.txt consists of output of diabetes.txt. <br>
+NB_output1.txt consists of output of weathernom.txt. <br>
+NB_output2.txt consists of output of diabetes.txt. <br>
+Data used is weathernom.csv file and diabetes.csv
+
+#### Note
+You can see from the output that the values obtained for pd, false alarms in zeroR are very low and relatively higher for Naive Bayes. This is because ZeroR does not take recall very well whereas Naive Bayes considers it.<br>
+
+To run the program, enable data in the main function and run the loop for the given data and classifier.
