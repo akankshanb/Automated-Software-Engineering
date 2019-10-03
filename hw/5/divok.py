@@ -59,21 +59,7 @@ if __name__ == "__main__":
 
 	# print(first)
 	dFinal = Div2([firstx, lasty])
+	for x in dFinal.ranges:
+		print("! %5s   %6.4f    %6.4f" % (x.n,x.lo,x.hi))
+	print( dFinal.b4.sd(), dFinal.gain)
 
-	
-	# print("")
-	#     #  0                   1
-	#     #  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
-	# d = Div([1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2])
-	# for x in d.ranges:
-	#   print("! %5s   %6.4f    %6.4f" % (x.n,x.lo,x.hi))
-	# print( d.b4.sd(), d.gain)
-	# print("")
-
-    # # print("")
-	#     #  0                   1
-	#     #  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
-	# d = Div([1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,1,1,1,1,1,1,1,1])
-	# for x in d.ranges:
-	#   print("! %5s   %6.4f    %6.4f" % (x.n,x.lo,x.hi))
-	# print( d.b4.sd(), d.gain)
