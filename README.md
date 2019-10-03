@@ -36,6 +36,11 @@ NB_output1.txt consists of output of weathernom.txt. <br>
 NB_output2.txt consists of output of diabetes.txt. <br>
 Data used is weathernom.csv file and diabetes.csv
 
+### HW5
+The output file is: <br>
+output1.txt consists of output of y with nums. <br>
+output2.txt consists of output of y with entropy. <br>
+
 #### Note
 You can see from the output that the values obtained for pd, false alarms in zeroR are very low and relatively higher for Naive Bayes. This is because ZeroR does not take recall very well whereas Naive Bayes considers it.<br>
 
