@@ -18,7 +18,9 @@ def first(l):
   return l[0]
 
 def last(l):  
-  "last in a list"     
+  "last in a list"  
+  if not len(l):
+    return None   
   return l[-1]
 
 def isNum(x): 
