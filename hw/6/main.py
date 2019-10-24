@@ -17,8 +17,8 @@ def file(fname):
 		t = Tbl()
 		t.read(fs)
 		tree  = t.regressionTree()
-		# print(tree)
-		t.showt(tree)
+		# print("TEEEERRREEE: ", tree)
+		# t.showt(tree)
 		
 		
 

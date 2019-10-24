@@ -27,7 +27,7 @@ class Num(Thing):
     i.lo, i.hi     = 10 ** 32, -10 ** 32
     # i.count = 0
     i.numList = []
-    i.inits = inits
+    i.inits = []
     # [i + x for x in inits]
     
 

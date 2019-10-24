@@ -19,7 +19,7 @@ class Div(Pretty):
     i.xis    = xis
     i._lst   = ordered(lst,key=x)
     i.b4     = i.xis(i._lst,key=x)
-    print("hi", i.b4)
+    # print("hi", i.b4)
     i.gain   = 0                             # where we will be, once done
     i.x      = x                             # how to get values from 'lst' items
     i.step   = int(len(i._lst)**THE.div.min) # each split need >= 'step' items

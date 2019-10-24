@@ -39,15 +39,20 @@ class Div2(Pretty):
     else:
       y_lst = Sym()
     x_lst = []
+    lst = sorted(lst, key = lambda x: x.cells[y_index])
+    
     for column in range(len(lst[0].cells) -1): #last column excluded for goal
-      lst = sorted(lst, key = lambda x: x.cells[y_index])
       if not column == y_index:
         temp = Num()
-        temp.add(i.cells[column])
+        for row in lst:
+          temp.add(row.cells[column])
+        # print("temp: ", temp)
+
         x_lst.append(temp)
 
-      for i in lst:
-        y_lst.add(i.cells[y_index])
+    for row in lst:
+      y_lst.add(row.cells[y_index])
+    
 
     # print(x_lst)
     return x_lst, y_lst
