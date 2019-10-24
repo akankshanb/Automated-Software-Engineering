@@ -5,6 +5,7 @@ Convert a list of column names into Sym or Num objects.
 """
 from lib import *
 from thing import Num,Sym
+from div2 import Div2
 
 class Cols(Pretty):
   def __init__(i,inits=[]):
@@ -45,5 +46,4 @@ class Cols(Pretty):
       i.indep += [tmp]
       what     = i.xnums if i.nump(txt) else i.xsyms
       what    += [tmp]
-
 
