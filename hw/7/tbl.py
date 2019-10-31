@@ -14,14 +14,30 @@ class Tbl(Pretty):
   def __init__(i,cols=None):
     i.rows = []
     i.cols = cols
-
+    i.header = None
   def clone(i):
     "Create an empty table of the same form as self."
     return   Tbl( Cols(i.cols.names) )
 
+  def dist(self,i,j,cols):
+    p = THE.row.p
+    d = 0
+    n = 0
+    for col in cols.all:
+      n += 1
+      d0 = col.dist(i.cells[col.pos], j.cells[col.pos])
+      d += d0**p
+    # print("do: ", d)
+    return d**(1/p) / n**(1/p) # normalize distance 0..1
+
+  def cos(i,x,y,z,distance,cols):
+    return (i.dist(x,z,cols)**2 + distance**2 - i.dist(y,z,cols)**2)/(2*distance) 
+
   def read(i, src):
     "Fo all rows in src, fill in the table."
-    for lst in cells(cols(rows(src))):
+    for n, lst in enumerate(cells(cols(rows(src)))):
+      if n == 0:
+        i.header = lst
       if i.cols:
         lst = [col + x for col,x in zip(i.cols.all,lst)]
         i.rows += [Row(lst)]
@@ -40,7 +56,7 @@ def rows(src):
     line = re.sub(THE.char.doomed, '', line.strip())
     if line:
       # breakup a string and add the data to a string array
-      line = line.split(THE.char.sep)  
+      line = line.split(THE.char.sep)
       if linesize is None:
         linesize = len(line)
       if len(line) == linesize:

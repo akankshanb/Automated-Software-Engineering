@@ -37,6 +37,7 @@ class Cols(Pretty):
   def add(i,pos,txt):
     klass  = Num if i.nump(txt) else Sym
     tmp    = klass(txt=txt, pos=pos, w=i.weight(txt))
+    # tmp.__add__()
     i.all += [tmp]
     if i.klassp(txt): i.klass=tmp
     what   = i.nums if i.nump(txt) else i.syms
@@ -45,5 +46,3 @@ class Cols(Pretty):
       i.indep += [tmp]
       what     = i.xnums if i.nump(txt) else i.xsyms
       what    += [tmp]
-
-
