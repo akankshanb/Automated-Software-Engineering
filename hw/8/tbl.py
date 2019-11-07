@@ -17,12 +17,12 @@ class Tbl(Pretty):
     i.header = None
     i.weight = 1
 
-  def dominates(i,j,goals): # i and j are rows.
+  def dominates(self, i,j,goals): # i and j are rows.
     z = 0.00001
     s1, s2, n = z,z,z+len(goals)
     for goal in goals:
       a,b = i.cells[goal.pos], j.cells[goal.pos]
-      a,b = goal.norm(a), goal.norm(b)  
+      a,b = goal.norm(a), goal.norm(b)
       s1 -= 10**(goal.w * (a-b)/n)
       s2 -= 10**(goal.w * (b-a)/n)
     return s1/n - s2/n # i is better if it losses least (i.e. this number under 0)

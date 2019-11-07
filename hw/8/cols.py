@@ -16,7 +16,8 @@ class Cols(Pretty):
     i.klass = None
     i.xnums = []
     i.xsyms = []
-
+    i.goals = []
+    i.w = 1
     [i.add(pos,txt) for pos,txt in enumerate(inits)]
 
   def klassp(i,x):
@@ -40,6 +41,7 @@ class Cols(Pretty):
     tmp    = klass(txt=txt, pos=pos, w=i.weight(txt))
     # tmp.__add__()
     i.all += [tmp]
+    i.w = i.weight(txt)
     if i.klassp(txt): i.klass=tmp
     what   = i.nums if i.nump(txt) else i.syms
     what  += [tmp]
@@ -47,3 +49,7 @@ class Cols(Pretty):
       i.indep += [tmp]
       what     = i.xnums if i.nump(txt) else i.xsyms
       what    += [tmp]
+    else:
+      i.goals += [tmp]
+
+

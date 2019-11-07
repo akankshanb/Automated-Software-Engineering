@@ -78,6 +78,10 @@ class Num(Thing):
         i.m2 -= d * (x - i.mu)
 
   # "i" is a Num instance, "x" and "y" are numbers, "no=?".
+  def norm(i, x): 
+    norm = lambda z: (z - i.lo)/(i.hi - i.lo + 10**-32)
+    return norm(x)
+    
   def dist(i,x,y):
     norm = lambda z: (z - i.lo)/(i.hi - i.lo + 10**-32)
     # print("x num: ", i.lo)
