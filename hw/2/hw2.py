@@ -8,15 +8,18 @@ class Tbl:
     row_list = []
     col_list = []
     invalid_cols = []
+    
     def __init__(self,header):
         self.header = header
+        self.oid = 1
         for index, header_val in enumerate(header):
             col_obj = Col(index, header_val)
             self.col_list.append(col_obj)
             
 
     def AddRowAndCol(self,row_list):
-        row = Row(row_list)
+        self.oid += 1
+        row = Row(row_list, self.oid)
         self.row_list.append(row)
         self.UpdateCol(row_list)
             
@@ -37,6 +40,7 @@ class Tbl:
 
     def PrintRows(self):
         for index, row in enumerate(self.row_list):
+            print("t.rows")
             print("|   ", index+1)
             row.PrintRow()
 
@@ -65,12 +69,20 @@ class Col():
         print("|    |   oid: ", self.oid)
         print("|    |   sd: ", self.sd)
         print("|    |   txt: ", self.txt)
+        
+        
 
 class Row():
-    def __init__(self, row):
+    def __init__(self, row,oid):
         self.row = row
+        self.oid = oid
     def PrintRow(self):
-        print()
+        print('| | cells')
+        for i, val in enumerate(self.row):
+            print('| | | ',i+1, val)
+        print('| | cooked')
+        print('| | dom: 0')
+        print('| | oid:', self.oid+1)
 
 class Num(Col):
     def __init__(self, col):
@@ -142,5 +154,6 @@ def main():
         else:
             t.AddRowAndCol(row)
     t.PrintCols()
+    t.PrintRows()
 if __name__ == '__main__':
     main()

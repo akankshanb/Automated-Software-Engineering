@@ -48,3 +48,142 @@ t.cols
 |    |   oid:  0
 |    |   sd:  1.941450686788302
 |    |   txt:  <$playHours
+t.rows
+|    1
+| | cells
+| | |  1 100
+| | |  2 68
+| | |  3 0
+| | |  4 3
+| | cooked
+| | dom: 0
+| | oid: 3
+t.rows
+|    2
+| | cells
+| | |  1 0
+| | |  2 ?85
+| | |  3 0
+| | |  4 0
+| | cooked
+| | dom: 0
+| | oid: 4
+t.rows
+|    3
+| | cells
+| | |  1 0
+| | |  2 80
+| | |  3 10
+| | |  4 0
+| | cooked
+| | dom: 0
+| | oid: 5
+t.rows
+|    4
+| | cells
+| | |  1 60
+| | |  2 83
+| | |  3 0
+| | |  4 4
+| | cooked
+| | dom: 0
+| | oid: 6
+t.rows
+|    5
+| | cells
+| | |  1 100
+| | |  2 70
+| | |  3 0
+| | |  4 3
+| | cooked
+| | dom: 0
+| | oid: 7
+t.rows
+|    6
+| | cells
+| | |  1 100
+| | |  2 65
+| | |  3 20
+| | |  4 0
+| | cooked
+| | dom: 0
+| | oid: 8
+t.rows
+|    7
+| | cells
+| | |  1 70
+| | |  2 64
+| | |  3 15
+| | |  4 5
+| | cooked
+| | dom: 0
+| | oid: 9
+t.rows
+|    8
+| | cells
+| | |  1 0
+| | |  2 72
+| | |  3 
+| | cooked
+| | dom: 0
+| | oid: 10
+t.rows
+|    9
+| | cells
+| | |  1 0
+| | |  2 69
+| | |  3 0
+| | |  4 4
+| | cooked
+| | dom: 0
+| | oid: 11
+t.rows
+|    10
+| | cells
+| | |  1 80
+| | |  2 75
+| | |  3 0
+| | |  4 3
+| | cooked
+| | dom: 0
+| | oid: 12
+t.rows
+|    11
+| | cells
+| | |  1 0
+| | |  2 75
+| | |  3 18
+| | |  4 4
+| | cooked
+| | dom: 0
+| | oid: 13
+t.rows
+|    12
+| | cells
+| | |  1 60
+| | |  2 72
+| | |  3 15
+| | |  4 5
+| | cooked
+| | dom: 0
+| | oid: 14
+t.rows
+|    13
+| | cells
+| | |  1 40
+| | |  2 81
+| | |  3 0
+| | |  4 2
+| | cooked
+| | dom: 0
+| | oid: 15
+t.rows
+|    14
+| | cells
+| | |  1 100
+| | |  2 71
+| | |  3 15
+| | |  4 0
+| | cooked
+| | dom: 0
+| | oid: 16
