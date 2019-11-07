@@ -1,42 +1,71 @@
 from tbl import *
 import csv
 import random
+num_times = 10
+
+class PTree:
+	def __init__(i, isRoot=False):
+		i.left = None
+		i.right = None
+		i.isRoot = isRoot
+		i.level = 0
+		i.rowCnt = 0
+		i.tbl = None
+		i.childType = ""
+
+	def printTree(i, pTree):
+		if not i.isRoot:
+			for _ in range(i.level):
+				print ("|. ", end =" ")
+		print (pTree.rowCnt)
+		if pTree.left:
+			pTree.printTree(pTree.left)
+
+		if pTree.right:
+			pTree.printTree(pTree.right)
+
+		if not pTree.right and not pTree.left:
+			for _ in range(i.level):
+				print ("|. ", end =" ")
+			for col in pTree.tbl.cols.nums[-4:]:
+				print(col.txt, end =" ")
+				if (isinstance(col, Num)):
+					print ("{0:.2f} ({1:.2f})".format(col.mu, col.sd()), end =" ")
+				else:
+					print ("{0:.2f} ({1:.2f})".format(col.mode, col.entropy), end =" ")
+			print()
 
 def main():
-	main_csv = "xomo10000.csv"
-	# data2 = file("pom310000.csv")
-	data1 = file(main_csv, main_csv, 100000, { "left": "", "right": ""})
+	# main_csv = "xomo10000.csv"
+	main_csv = "pom310000.csv"
+	node = PTree(True)
+	data1 = file(main_csv, main_csv, 100000, node)
+	node.printTree(node)
 
 
-
-def file(fname, main_csv, min_length, tableString):
+def file(fname, main_csv, min_length, pTree):
 	"read lines from a file"
 	with open(fname) as fs:
 		t = Tbl()
 		t.read(fs)
+		pTree.tbl = t
+		pTree.rowCnt = len(t.rows)
 		if fname == main_csv:
-			min_length = len(list(fs)) ** (1/2)
-		# print("Length", len(t.rows))
+			min_length = len(t.rows) ** (1/2)
 		
 		if len(t.rows)-1 > min_length:
-			fastMap(t, tableString)
-			# print("check", tableString["left"])
-			tableString["left"] += "|. "
-			tableString["right"] += "|. "
-			data3 = file("left.csv", main_csv, min_length, tableString)
-			data4 = file("right.csv", main_csv, min_length, tableString)
-		else:
-			if fname == "left.csv":
-				print("left value: ", tableString["left"])
-			else:
-				print("right value: ", tableString["right"])
+			fastMap(t, pTree)
+			levelAppender =  str(pTree.level + 1) + ".csv"
+			data3 = file("left" + levelAppender, main_csv, min_length, pTree.left)
+			data4 = file("right" + levelAppender, main_csv, min_length, pTree.right)
 
-def fastMap(t, tableString):
+
+def fastMap(t, pTree):
 	table_header = t.header
 	best_delta = len(t.rows)
 	best_left = None
 	best_right = None
-	for index in range(10):
+	for index in range(num_times):
 		r_index = random.randint(0, len(t.rows)-1)
 		selected_row = t.rows[r_index]
 		pivot1 = findPivots(t, selected_row)
@@ -65,13 +94,21 @@ def fastMap(t, tableString):
 			best_left = left
 			best_right = right
 
-	# print("left dist: ", len(best_left))
-	# print("right dist: ", len(best_left))
+	levelAppender =  str(pTree.level + 1) + ".csv"
 
-	tableString["left"] += "|. " + str(len(best_left)) + "\n"
-	tableString["right"] += "|. " + str(len(best_right)) + "\n"
-	get_csv("left.csv", best_left)
-	get_csv("right.csv", best_right)
+	pTree.left = PTree()
+	pTree.left.level = pTree.level + 1
+	pTree.left.childType = "left"
+	get_csv("left" + levelAppender, best_left)
+
+	pTree.right = PTree()
+	pTree.right.level = pTree.level + 1
+	pTree.right.childType = "right"
+
+	get_csv("right" + levelAppender, best_right)
+
+
+
 
 def get_csv(csv_text_name, data):
 	out = csv.writer(open(csv_text_name,"w"), delimiter=',')
@@ -82,7 +119,6 @@ def findPivots(t, selected_row):
 	dist_list = []
 	for new_row in t.rows:
 		cal_dist = t.dist(selected_row, new_row, t.cols)
-		# print(new_row)
 		dist_list.append((cal_dist, new_row))
 	dist_list.sort(key=lambda x: x[0])
 	new_row = dist_list[int(0.9 * len(dist_list))]
@@ -90,7 +126,6 @@ def findPivots(t, selected_row):
 
 def get_median(new_dist_list):
 	half = len(new_dist_list) // 2
-	# print("half: ", half)
 	if not len(new_dist_list) % 2:
 		return (new_dist_list[half - 1][0] + new_dist_list[half][0]) / 2.0
 	else:
