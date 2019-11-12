@@ -41,6 +41,23 @@ The output file is: <br>
 output1.txt consists of output of y with nums. <br>
 output2.txt consists of output of y with entropy. <br>
 
+### HW6
+the output file is: <br>
+auto.txt consists of the output for auto.csv file <br>
+diabetes.txt consists of the output for diabetes.csv <br>
+To run the file:
+Uncomment the part in main.py for diabetes.csv to run the decisionTree funciton
+Uncomment the part in main.py for auto.csv to run the regressionTree function
+python3 main.py
+
+### HW7
+the output file is: <br>
+pom310000.txt consists of the output for pom310000.csv <br>
+xomo10000.txt consists of the output for xomo10000.csv <br>
+
+### HW7 
+the output file is: <br>
+
 #### Note
 You can see from the output that the values obtained for pd, false alarms in zeroR are very low and relatively higher for Naive Bayes. This is because ZeroR does not take recall very well whereas Naive Bayes considers it.<br>
 
