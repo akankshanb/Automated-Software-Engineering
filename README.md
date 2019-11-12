@@ -46,7 +46,7 @@ the output file is: <br>
 auto.txt consists of the output for auto.csv file <br>
 diabetes.txt consists of the output for diabetes.csv <br>
 To run the file:
-Uncomment the part in main.py for diabetes.csv to run the decisionTree funciton
+Uncomment the part in main.py for diabetes.csv to run the decisionTree function <br>
 Uncomment the part in main.py for auto.csv to run the regressionTree function
 python3 main.py
 
