@@ -16,6 +16,22 @@ class Thing(Pretty):
     n = i.n + j.n
     return i.n/n*i.variety() + j.n/n*j.variety()
 
+  def __add__(i,x):
+    # print("add here")
+    y = i.key(x)
+    if y != THE.char.skip:
+      i.n += 1
+      i.add(y)
+    return x
+
+  def __sub__(i,x):
+    # print("sub here")
+    y = i.key(x)
+    if y != THE.char.skip:
+      i.n -= 1
+      i.sub(y)
+    return x
+
 class Num(Thing):
   "Track numbers seen in a column"
   def __init__(i, inits=[], pos=0,txt="",w=1,key=same):
@@ -28,8 +44,13 @@ class Num(Thing):
     # i.count = 0
     i.numList = []
     i.inits = []
-    # [i + x for x in inits]
-    
+    i.kids = None
+    [i + x for x in inits]
+
+  def split(i, data_rows, cut, column):
+    l_half, i.lo = data_rows[:cut],data_rows[cut].cells[column.pos]
+    r_half, i.hi = data_rows[cut:], data_rows[cut+1].cells[column.pos]
+    return [(-float('inf'), i.lo, l_half),(i.hi, float('inf'), r_half)]
 
   def variety(i): 
     return i.sd()
@@ -41,8 +62,11 @@ class Num(Thing):
 
   def add(i, x):
       # i.numList.append(x)
+      x = int(x)
       i.inits.append(x)
       i.n += 1
+      # print("check0 x: ", x)
+      # print("check1 low: ", i.lo)
       if x < i.lo: i.lo = x
       if x > i.hi: i.hi = x
       d = x - i.mu
@@ -53,14 +77,15 @@ class Num(Thing):
 
   def sub(i, x):
       # i.numList.remove(x)
-      i.inits.remove(x)
-      i.n -= 1
-      if i.n < 2:
-        i.n, i.mu, i.m2 = 0, 0, 0
-      else:
-        d = x - i.mu
-        i.mu -= d / i.n
-        i.m2 -= d * (x - i.mu)
+      if x in i.inits:
+        i.inits.remove(x)
+        i.n -= 1
+        if i.n < 2:
+          i.n, i.mu, i.m2 = 0, 0, 0
+        else:
+          d = x - i.mu
+          i.mu -= d / i.n
+          i.m2 -= d * (x - i.mu)
 
   # def div(i, data, x,y,yis):
   #   dSym = Div2(data, x, y, yis)
@@ -77,7 +102,7 @@ class Sym(Thing):
     i.cnt          = {}
     # i.count = 0
     i.symList = []
-    # [i + x for x in inits]
+    [i + x for x in inits]
 
   def add(i,x):
     i.symList.append(x)

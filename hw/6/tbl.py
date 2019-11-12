@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # vim: sta:et:sw=2:ts=2:sts=2
+
 """
 Manage a list of rows, keep column statitics in Nums or Syms
 """
@@ -17,7 +18,7 @@ class Tbl(Pretty):
   def __init__(i,cols=None):
     i.rows = []
     i.cols = cols
-
+  
   def clone(i):
     "Create an empty table of the same form as self."
     return   Tbl( Cols(i.cols.names) )
@@ -26,66 +27,90 @@ class Tbl(Pretty):
     "For all rows in src, fill in the table."
     for lst in cells(cols(rows(src))):
       if i.cols:
-        # lst = [col + x for col,x in zip(i.cols.all,lst)]
+        lst = [col + x for col,x in zip(i.cols.all,lst)]
         i.rows += [Row(lst)]
       else:
         i.cols = Cols(lst)
     return i
 
   def decisionTree(i):
-    return i.tree(i.rows, 
+    return i.tree(i.rows,
                 y   = lambda z: z.cells[i.cols.klass.pos],
-                yis = "Sym")
+                yis = Sym)
   def regressionTree(i):
+    # print("COL: ", i.cols)
     return i.tree(i.rows,
                 y   = lambda z: last(z.cells),
-                yis = "Num")
+                yis = Num)
 
-  def showt(tree,pre= '',rnd=THE.tree.rnd):
-    # print("Tree: ", tree)
-    # most = sorted(x.n for x in tree)[-1]
-    for x  in tree:
+  def showt(i, tree, pre= '',rnd=THE.tree.rnd):
+
+    for branch in tree:
+      x = branch
+      mostl = sorted(x.n for x in x.cols.all)[-1]
       after =""
       s = x.txt + ' = ' + str(x.lo)
-      if x.n == most:
-        after,most = "*", None
+      if x.n == mostl:
+        after,mostl = "*", None
       if x.lo != x.hi:
         s += ' .. ' + str(x.hi)
-      if isa(x.kids,Thing):
-        print(pre + s,after,
-              ":",x.kids.middle(rnd),
-              '('+str(x.kids.n) +')')
+        if isa(x.kids,Num):
+          print(pre + s,after,
+                '('+str(x.kids.n) +')')
+        elif isa(x.kids,Sym):
+          if x.test == "positive":
+            s += "tested_positive"
+          else:
+            s += "tested_negative"
+          print(pre + s,after,
+                '('+str(x.kids.n) +')')
+        else:
+          print(pre + s,after,
+                '('+str(x.n) +')')
+        print("")
       else:
         print(pre + s,after)
-        showt(x.kids,pre + '|   ')
+      
+      # print("lvl: ", tree[branch].lvl)
+      for y in range(branch.lvl):
+        print(pre, end="")
 
-  def tree(i,lst,y,yis,lvl=0):
-    if len(lst) >= THE.tree.minObs*2:
+      # if x.kids:
+      if not isa(x.kids,Num):
+        i.showt(x.kids, '|   ')
+
+  def xfunction(row, pos):
+    return row.cells[pos]
+
+  def tree(i,row_lst,y,yis,lvl=0):
+    # print("list: ", lst)
+    if len(row_lst) >= THE.tree.minObs*2:
       # find the best column
-      lo, cut, col = -10**32, None, None
+      lo, cut, col = 10**32, None, None
       for col1 in i.cols.indep:
+        # print("row: ", row_lst)
         x = lambda row: row.cells[col1.pos]
-        d = Div2(lst, x=x, y=y, yis=yis)
+        d = Div2(row_lst, x=x, y=y, yis=yis)
         cut1, lo1 = d.finalcutlow()
-        # print(cut1, lo1)
         if cut1:
           if lo1 < lo:
             cut, lo, col = cut1, lo1, col1
-            print("updated: ", cut, lo, col)
       # if a cut exists
       if cut:
         # split data on best col, call i.tree on each split
         x = lambda row: row.cells[col.pos]
+        if yis == Sym:
+          test = i.cols.dep[0]
         return [o(lo   = lo,
-                  hi   = hi,
-                  n    = len(kids),
-                  txt  = col.txt,
-                  kids = i.tree(kids,y,yis,lvl+1)
-                ) for lo,hi,kids in col.split(lst, x, cut)]
-    if yis == "Num":
-      return Num(lst,key=y)
-    else:
-      return Sym(lst,key=y)
+                hi   = hi,
+                n    = len(kids),
+                txt  = col.txt,
+                cols  = i.cols,
+                lvl = lvl,
+                test = test,
+                kids = i.tree(kids,y,yis,lvl+1)
+              ) for lo,hi,kids in col.split(row_lst, cut, col)]
+    return yis(row_lst,key=y)
 
 #-----------------------------------------
 # iterators
@@ -138,5 +163,6 @@ def prep(x):
     if c in x:
       return num
   return str
+
 
 

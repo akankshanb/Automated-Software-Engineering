@@ -1,15 +1,13 @@
 from div2 import Div2
-from data1 import data1
-from data2 import data2
+# from data1 import data1
+# from data2 import data2
 from tbl import *
 import csv
-
+import sys
 
 def main():
-	data = file("hw/6/diabetes.csv")
+	data = file("auto.csv")
 	# data = file("diabetes.csv")
-	# hw/6/diabetes.csv
-
 
 def file(fname):
 	"read lines from a file"
@@ -17,9 +15,8 @@ def file(fname):
 		t = Tbl()
 		t.read(fs)
 		tree  = t.regressionTree()
-		# print("TEEEERRREEE: ", tree)
-		# t.showt(tree)
-		
+		# tree  = t.decisionTree()
+		t.showt(tree)
 		
 
 if __name__ == '__main__':
