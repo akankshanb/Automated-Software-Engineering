@@ -44,7 +44,6 @@ class Tbl(Pretty):
                 yis = Num)
 
   def showt(i, tree, pre= '',rnd=THE.tree.rnd):
-
     for branch in tree:
       x = branch
       mostl = sorted(x.n for x in x.cols.all)[-1]
@@ -107,7 +106,7 @@ class Tbl(Pretty):
                 txt  = col.txt,
                 cols  = i.cols,
                 lvl = lvl,
-                test = test,
+                test = "test",
                 kids = i.tree(kids,y,yis,lvl+1)
               ) for lo,hi,kids in col.split(row_lst, cut, col)]
     return yis(row_lst,key=y)
