@@ -3,7 +3,7 @@ import random
 import sys
 from hw7 import Centroids
 from pytablewriter import MarkdownTableWriter
-sys.path.insert(0, '../6-modified-for-8/')
+sys.path.insert(0, '6-modified-for-8/')
 from makeTree import callFromHw8
 from tbl import *
 
@@ -42,12 +42,12 @@ def file(fname):
 		bestlist = list(map(lambda x : x.cells, t.rows))
 		bestlist = bestlist[-4:] + bestlist[0:4]
 
-		# # Print dominating values 
-		# writer = MarkdownTableWriter()
-		# writer.table_name = "Row Best rest"
-		# writer.headers = t.header
-		# writer.value_matrix = bestlist
-		# writer.write_table()
+		# Print dominating values 
+		writer = MarkdownTableWriter()
+		writer.table_name = "Row Best rest"
+		writer.headers = t.header
+		writer.value_matrix = bestlist
+		writer.write_table()
 
 		c = Centroids()
 		centroidList = c.getCentroids()
@@ -78,11 +78,12 @@ def file(fname):
 				get_csv(clusterName, clusterListNew)
 			
 			# get tree for each cluster thus formed
-			for index, selected_row in enumerate(tc.rows):
-				clusterName = "cluster" + str(index)
-				print("----------- TREE " + str(index) + " -------------")
-				callFromHw8(clusterName)
-				# break
+
+			# TO PRINT TREE UNCOMMENT THESE LINES
+			# for index, selected_row in enumerate(tc.rows):
+			# 	clusterName = "cluster" + str(index)
+			# 	print("----------- TREE " + str(index) + " -------------")
+			# 	callFromHw8(clusterName)
 
 			
 def get_csv(csv_text_name, data):
@@ -103,7 +104,6 @@ def getMostEnvy(tc, centroidDict):
 			mostEnvy = envy
 			envyRow = new_row
 			envyIndex = index
-			# envyClusterData = clusterDict[index]
 
 	centroidDict["mostEnvy"] = envy
 	centroidDict["mostEnvyRow"] = envyRow

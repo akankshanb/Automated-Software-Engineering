@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, '../6-modified-for-8/')
+sys.path.insert(0, '6-modified-for-8/')
 from tbl import *
 import csv
 import random
