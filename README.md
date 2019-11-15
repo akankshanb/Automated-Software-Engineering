@@ -57,6 +57,12 @@ xomo10000.txt consists of the output for xomo10000.csv <br>
 
 ### HW8 
 the output file is: <br>
+trees.md
+rowsBestRest.md
+Comment.md
+Comment2.md
+To run the program for rowsBestRest do -> python3 main.py
+To run program for trees.md, uncomment lines 83-86 in main.py and run -> python3 main.py
 
 #### Note
 You can see from the output that the values obtained for pd, false alarms in zeroR are very low and relatively higher for Naive Bayes. This is because ZeroR does not take recall very well whereas Naive Bayes considers it.<br>
