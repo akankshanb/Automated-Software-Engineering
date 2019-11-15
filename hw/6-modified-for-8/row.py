@@ -11,6 +11,6 @@ class Row(Pretty):
     i.cells = cells
     i.cooked = cooked
     i.dom = dom
-    i.clusterData = None
+    i.id = None
 
 

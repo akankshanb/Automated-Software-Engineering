@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, '../6-modified-for-8/')
 from tbl import *
 import csv
 import random
@@ -13,6 +15,7 @@ class PTree:
 		i.rowCnt = 0
 		i.tbl = None
 		i.childType = ""
+		i.clusterData = []
 
 	def printTree(i, pTree):
 		# if not i.isRoot:
@@ -28,7 +31,11 @@ class PTree:
 		if not pTree.right and not pTree.left:
 			# for _ in range(i.level):
 				#print ("|. ", end =" ")
-			centroidRows.append(pTree.tbl.cols.nums)
+			# print("CHECK: ", len(pTree.clusterData))
+			centroidRows.append({
+				"clusterData": pTree.clusterData,
+				"centroid": pTree.tbl.cols.nums
+			})
 			# print(centroidRows[0])
 			# for col in pTree.tbl.cols.nums:
 			# 	print(col.txt, end =" ")
@@ -91,6 +98,7 @@ def fastMap(t, pTree):
 		left = []
 		right = []
 		left.append(table_header)
+		# print("value ", table_header)
 		right.append(table_header)
 		for cos_dist in new_dist_list:
 			if cos_dist[0] <= median:
@@ -98,6 +106,7 @@ def fastMap(t, pTree):
 			else:
 				right.append(cos_dist[1].cells)
 		iter_delta = abs(len(right) - len(left))
+		
 		if iter_delta < best_delta:
 			best_delta = iter_delta
 			best_left = left
@@ -108,12 +117,14 @@ def fastMap(t, pTree):
 	pTree.left = PTree()
 	pTree.left.level = pTree.level + 1
 	pTree.left.childType = "left"
+	pTree.left.clusterData = best_left
+	# print("check: ", best_left)
 	get_csv("left" + levelAppender, best_left)
 
 	pTree.right = PTree()
 	pTree.right.level = pTree.level + 1
 	pTree.right.childType = "right"
-
+	pTree.right.clusterData = best_right
 	get_csv("right" + levelAppender, best_right)
 
 
