@@ -9,6 +9,7 @@ class Tbl:
     col_list = []
     invalid_cols = []
     
+    
     def __init__(self,header):
         self.header = header
         self.oid = 1
