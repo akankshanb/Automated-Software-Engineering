@@ -110,7 +110,7 @@ class Num(Thing):
   #   delta  = x - i.mu
   #   i.mu  += delta*1.0/i.n
   #   i.m2  += delta*(x - i.mu)
-  
+
   def same(i,j, conf=0.95, small=0.38):
     return i.tTestSame(j,conf) or hedges(i,j, small)
     
@@ -130,6 +130,7 @@ def criticalValue(df,conf=0.95,
        0.95: [ 6.314, 2.92,  2.015, 1.812, 1.753, 1.725, 1.708, 1.697, 1.671, 1.66],
        0.99: [31.821, 6.965, 3.365, 2.764, 2.602, 2.528, 2.485, 2.457, 2.39,  2.364]}):
   return interpolate(df, xs, ys[conf])
+  
 def interpolate(x,xs,ys):
   if x <= xs[0] : return ys[0]
   if x >= xs[-1]: return ys[-1]

@@ -14,8 +14,9 @@ THE= o(
             skip = "?",
             klass= "!",
             doomed = r'([\n\t\r ]|#.*)'),
-  div  = o( trivial = 1.025, 
+  div  = o( trivial = 1.01, 
             cohen   = 0.3, 
             min     = 0.5),
-  row  = o( p = 2 )
+  row  = o( p = 2,
+            alpha = 0.5)
 )
