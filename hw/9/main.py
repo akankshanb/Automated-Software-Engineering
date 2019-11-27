@@ -1,114 +1,199 @@
+from tbl import *
 import csv
 import random
-import sys
-from hw7 import Centroids
-from pytablewriter import MarkdownTableWriter
-sys.path.insert(0, '6-modified-for-8/')
-from makeTree import callFromHw8
-from tbl import *
+num_times = 1
+after_num = 1
+leaf_num_runs = 1
+centroidRows = {
+	"BEFORE": [],
+	"AFTER": [],
+	"allTable": [],
+	"incTable": []
+}
 
+class PTree:
+	def __init__(i, tag, isRoot=False):
+		i.left = None
+		i.right = None
+		i.isRoot = isRoot
+		i.level = 0
+		i.rowCnt = 0
+		i.tbl = None
+		i.childType = ""
+		i.clusterData = []
+		i.tag = tag
+
+	def printTree(i, pTree):
+		if not i.isRoot:
+			for _ in range(i.level):
+				print ("|. ", end =" ")
+		print (pTree.rowCnt)
+		if pTree.left:
+			pTree.printTree(pTree.left)
+
+		if pTree.right:
+			pTree.printTree(pTree.right)
+
+		if not pTree.right and not pTree.left:
+			for _ in range(i.level):
+				print ("|. ", end =" ")
+			for col in pTree.tbl.cols.nums[-4:]:
+				print(col.txt, end =" ")
+				if (isinstance(col, Num)):
+					print ("{0:.2f} ({1:.2f})".format(col.mu, col.sd()), end =" ")
+					centroidRows[i.tag].append(col)
+				else:
+					print ("{0:.2f} ({1:.2f})".format(col.mode, col.entropy), end =" ")
+					centroidRows[i.tag].append(col)
+			print()
+
+	def getLeafClusters(i, pTree):
+		if pTree.left:
+			pTree.getLeafClusters(pTree.left)
+
+		if pTree.right:
+			pTree.getLeafClusters(pTree.right)
+
+		if not pTree.right and not pTree.left:
+			centroidRows[i.tag].append({
+				"clusterData": pTree.clusterData,
+				"centroid": pTree.tbl.cols.nums
+			})
+
+# class Centroids:
+# 	def getCentroids():
+# 		main()
+# 		return centroidRows
 
 def main():
-	main_csv = "auto.csv"
-	data1 = file(main_csv)
+	main_csv = "xomo100.csv"
+	# main_csv = "pom310000.csv"
+
+	# Create 1 tree for BEFORE probe
+	nodeBefore = PTree("BEFORE", True)
+	data1 = file(main_csv, main_csv, 100000, nodeBefore, "BEFORE")
+	nodeBefore.getLeafClusters(nodeBefore)
+	# print("Cent bef len: ", len(centroidRows["BEFORE"]))
+
+	# Create 20 AFTER probes
+	baseline = 0
+	for index in range(after_num):
+		centroidRows["AFTER"] = []
+		nodeAfter = PTree("AFTER", True)
+		data1 = file(main_csv, main_csv, 100000, nodeAfter, "AFTER")
+		nodeAfter.getLeafClusters(nodeAfter)
+		# print("Cent aft len: ", len(centroidRows["AFTER"]))
+		# select leaf cluster of before trees
+
+		trueTotal = 0
+		for leafIndex in range(leaf_num_runs): # ideally 100
+			beforeLeaf = centroidRows["BEFORE"][random.randint(0, len(centroidRows["BEFORE"]))-1]
+			afterLeaf = centroidRows["AFTER"][random.randint(0, len(centroidRows["AFTER"]))-1]
+			# print("rand: ", beforeLeaf["centroid"])
+			sameValueList = []
+			for centIndex, centroidNum in enumerate(beforeLeaf["centroid"]):
+				sameValueList += [centroidNum.same(afterLeaf["centroid"][centIndex])]
+			trueTotal += sameValueList.count(True)
+			# print("truetotal: ", trueTotal)
+
+		trueTotal = trueTotal/leaf_num_runs
+		baseline += trueTotal
+
+	baseline = baseline/after_num
+	print("All Baseline: ", baseline)
 
 
-def file(fname):
-	clusterDict = {}
+
+def file(fname, main_csv, min_length, pTree, tag):
 	"read lines from a file"
 	with open(fname) as fs:
+		# print("hw7 print")
 		t = Tbl()
 		t.read(fs)
-		# print("len: ", len(t.rows))
-		for index, row in enumerate(t.rows):
-			newRowList = t.rows.copy()
-			del newRowList[index]
-			# print("len", len(t.rows))
-			sampling = random.choices(newRowList, k=100)
-			# print("len1", len(sampling))
-			domCount = 0
+		t.tag = tag
+		pTree.tbl = t
+		pTree.rowCnt = len(t.rows)
+		if fname == main_csv:
+			min_length = len(t.rows) ** (1/2)
+		
+		if len(t.rows)-1 > min_length:
+			fastMap(t, pTree)
+			levelAppender =  str(pTree.level + 1) + ".csv"
+			data3 = file("left" + levelAppender, main_csv, min_length, pTree.left, tag)
+			data4 = file("right" + levelAppender, main_csv, min_length, pTree.right, tag)
 
-			for sample in sampling:
-				goals = t.cols.goals
-				# print("goals: ", goals)
-				domValue = t.dominates(row, sample, goals)
-				if domValue < 0:
-					domCount += 1 
 
-			row.dom = domCount
+def fastMap(t, pTree):
+	table_header = t.header
+	best_delta = len(t.rows)
+	best_left = None
+	best_right = None
+	for index in range(num_times):
+		r_index = random.randint(0, len(t.rows)-1)
+		selected_row = t.rows[r_index]
+		pivot1 = findPivots(t, selected_row)
+		pivot2 = findPivots(t, pivot1[1])
 
-		# sort all rows on this count
-		t.rows.sort(key=lambda x: x.dom)
-		bestlist = list(map(lambda x : x.cells, t.rows))
-		bestlist = bestlist[-4:] + bestlist[0:4]
+		new_dist_list = []
+		for new_row in t.rows:
+			cos_distance = t.cos(pivot1[1], pivot2[1], new_row, pivot2[0], t.cols)
+			# print("cost dist: ", cos_distance)
+			new_dist_list.append((cos_distance, new_row))
+		new_dist_list.sort(key=lambda x: x[0])
+		median = get_median(new_dist_list)
+		# print("med: ", median)
+		left = []
+		right = []
+		left.append(table_header)
+		right.append(table_header)
+		for cos_dist in new_dist_list:
+			if cos_dist[0] <= median:
+				left.append(cos_dist[1].cells)
+			else:
+				right.append(cos_dist[1].cells)
+		iter_delta = abs(len(right) - len(left))
+		if iter_delta < best_delta:
+			best_delta = iter_delta
+			best_left = left
+			best_right = right
 
-		# Print dominating values 
-		writer = MarkdownTableWriter()
-		writer.table_name = "Row Best rest"
-		writer.headers = t.header
-		writer.value_matrix = bestlist
-		writer.write_table()
+	levelAppender =  str(pTree.level + 1) + ".csv"
 
-		c = Centroids()
-		centroidList = c.getCentroids()
+	pTree.left = PTree(pTree.tag)
+	pTree.left.level = pTree.level + 1
+	pTree.left.childType = "left"
+	pTree.left.clusterData = best_left
+	get_csv("left" + levelAppender, best_left)
 
-		rowList = []
-		clusterList = []
-		for index, centerData in enumerate(centroidList):
-			mulist = list(map(lambda x : x.mu, centerData["centroid"]))
-			rowList += [mulist]
-			clusterList += [centerData["clusterData"]]
-			
-		get_csv("cent.csv", rowList)
-		with open("cent.csv") as fs:
-			tc = Tbl()
-			tc.read(fs)
-			for index, selected_row in enumerate(tc.rows):
-				clusterDict[index] = {}
-				clusterDict[index]["row"] = selected_row
-				
-				# get most envious centroid for the given centroid 
-				getMostEnvy(tc, clusterDict[index])
-				envyIndex = clusterDict[index]["mostEnvyIndex"]
-				clusterListNew = clusterList[index] + clusterList[envyIndex][1:]
-				# print(len(clusterListNew))
+	pTree.right = PTree(pTree.tag)
+	pTree.right.level = pTree.level + 1
+	pTree.right.childType = "right"
+	pTree.right.clusterData = best_right
+	get_csv("right" + levelAppender, best_right)
 
-				# get cluster data for both the given centroids
-				clusterName = "cluster" + str(index)
-				get_csv(clusterName, clusterListNew)
-			
-			# get tree for each cluster thus formed
 
-			# TO PRINT TREE UNCOMMENT THESE LINES
-			# for index, selected_row in enumerate(tc.rows):
-			# 	clusterName = "cluster" + str(index)
-			# 	print("----------- TREE " + str(index) + " -------------")
-			# 	callFromHw8(clusterName)
 
-			
+
 def get_csv(csv_text_name, data):
 	out = csv.writer(open(csv_text_name,"w"), delimiter=',')
 	out.writerows(data)
 
-def getMostEnvy(tc, centroidDict):
-	selected_row = centroidDict["row"]
-	mostEnvy = -100000
-	envyRow = None
-	envyIndex = None
+def findPivots(t, selected_row):
+	new_row = None
+	dist_list = []
+	for new_row in t.rows:
+		cal_dist = t.dist(selected_row, new_row, t.cols)
+		dist_list.append((cal_dist, new_row))
+	dist_list.sort(key=lambda x: x[0])
+	new_row = dist_list[int(0.9 * len(dist_list))]
+	return new_row
 
-	for index, new_row in enumerate(tc.rows):
-		delta = tc.dist(selected_row, new_row, tc.cols)
-		epsilon = tc.dominates(selected_row, new_row, tc.cols.goals)
-		envy = (1-delta)-epsilon
-		if envy > mostEnvy:
-			mostEnvy = envy
-			envyRow = new_row
-			envyIndex = index
-
-	centroidDict["mostEnvy"] = envy
-	centroidDict["mostEnvyRow"] = envyRow
-	centroidDict["mostEnvyIndex"] = envyIndex
-	return centroidDict
+def get_median(new_dist_list):
+	half = len(new_dist_list) // 2
+	if not len(new_dist_list) % 2:
+		return (new_dist_list[half - 1][0] + new_dist_list[half][0]) / 2.0
+	else:
+		return new_dist_list[half][0]
 	
 
 if __name__ == '__main__':

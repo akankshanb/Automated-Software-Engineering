@@ -14,10 +14,8 @@ THE= o(
             skip = "?",
             klass= "!",
             doomed = r'([\n\t\r ]|#.*)'),
-  div  = o( trivial = 0.9, 
+  div  = o( trivial = 1.025, 
             cohen   = 0.3, 
             min     = 0.5),
-  tree = o( minObs = 4,
-            rnd = 4),
   row  = o( p = 2 )
 )
