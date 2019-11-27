@@ -4,6 +4,9 @@ import random
 num_times = 1
 after_num = 1
 leaf_num_runs = 1
+inc_num = 50
+inc_num_end = 100
+
 centroidRows = {
 	"BEFORE": [],
 	"AFTER": [],
@@ -60,13 +63,8 @@ class PTree:
 				"centroid": pTree.tbl.cols.nums
 			})
 
-# class Centroids:
-# 	def getCentroids():
-# 		main()
-# 		return centroidRows
-
 def main():
-	main_csv = "xomo100.csv"
+	main_csv = "xomo10000.csv"
 	# main_csv = "pom310000.csv"
 
 	# Create 1 tree for BEFORE probe
@@ -75,7 +73,7 @@ def main():
 	nodeBefore.getLeafClusters(nodeBefore)
 	# print("Cent bef len: ", len(centroidRows["BEFORE"]))
 
-	# Create 20 AFTER probes
+	# ALL: Create 20 AFTER probes
 	baseline = 0
 	for index in range(after_num):
 		centroidRows["AFTER"] = []
@@ -101,6 +99,47 @@ def main():
 
 	baseline = baseline/after_num
 	print("All Baseline: ", baseline)
+
+
+
+
+
+	# INCREMENTAL: Create 20 AFTER probes - TODO
+
+	data500 = 'data-500.csv'
+	with open(main_csv, 'r') as r, open(data500, 'w') as w:
+		data = r.readlines()
+		header, rows = data[0], data[1:5001]
+		random.shuffle(rows)
+		requiredRows = '\n'.join([rows[rowIndex].strip() for rowIndex in range(inc_num)])
+		incRows = '\n'.join([rows[rowIndex].strip() for rowIndex in range(inc_num, inc_num_end)])
+		w.write(header + incRows)
+
+	# for index in range(after_num):
+	# 	centroidRows["AFTER"] = []
+	# 	nodeAfter = PTree("AFTER", True)
+	# 	data1 = file(data500, data500, 500, nodeAfter, "AFTER")
+	# 	nodeAfter.getLeafClusters(nodeAfter)
+	# 	# print("Cent aft len: ", len(centroidRows["AFTER"]))
+	# 	# select leaf cluster of before trees
+
+	# 	trueTotal = 0
+	# 	for leafIndex in range(leaf_num_runs): # ideally 100
+	# 		beforeLeaf = centroidRows["BEFORE"][random.randint(0, len(centroidRows["BEFORE"]))-1]
+	# 		afterLeaf = centroidRows["AFTER"][random.randint(0, len(centroidRows["AFTER"]))-1]
+	# 		# print("rand: ", beforeLeaf["centroid"])
+	# 		sameValueList = []
+	# 		for centIndex, centroidNum in enumerate(beforeLeaf["centroid"]):
+	# 			sameValueList += [centroidNum.same(afterLeaf["centroid"][centIndex])]
+	# 		trueTotal += sameValueList.count(True)
+			# print("truetotal: ", trueTotal)
+
+		# trueTotal = trueTotal/leaf_num_runs
+	# 	# baseline += trueTotal
+
+	# baseline = baseline/after_num
+	# print("Inc Baseline: ", baseline)
+	# ^^ TODO ^^
 
 
 
