@@ -101,17 +101,17 @@ def main():
 	baseline = 0
 	finalTable = []
 
-	# Calculate for incremental data
-	with open(data500) as fs, open(dataInc) as fs1:
-		tTop = Tbl()
-		tTop.read(fs)
-		tTop.tag = "AFTER"
+	# # Calculate for incremental data
+	# with open(data500) as fs, open(dataInc) as fs1:
+	# 	tTop = Tbl()
+	# 	tTop.read(fs)
+	# 	tTop.tag = "AFTER"
 
-		t4500 = Tbl()
-		t4500.read(fs1)
-		t4500.tag = "AFTER"
+	# 	t4500 = Tbl()
+	# 	t4500.read(fs1)
+	# 	t4500.tag = "AFTER"
 
-	finalCsv = getAnomaly(tTop, t4500)
+	# finalCsv = getAnomaly(tTop, t4500)
 
 	for index in range(after_num):
 
@@ -122,17 +122,17 @@ def main():
 		# select leaf cluster of before trees
 		nodeAfter.getLeafClusters(nodeAfter)
 
-		# # Calculate for incremental data
-		# with open(data500) as fs, open(dataInc) as fs1:
-		# 	tTop = Tbl()
-		# 	tTop.read(fs)
-		# 	tTop.tag = "AFTER"
+		# Calculate for incremental data
+		with open(data500) as fs, open(dataInc) as fs1:
+			tTop = Tbl()
+			tTop.read(fs)
+			tTop.tag = "AFTER"
 
-		# 	t4500 = Tbl()
-		# 	t4500.read(fs1)
-		# 	t4500.tag = "AFTER"
+			t4500 = Tbl()
+			t4500.read(fs1)
+			t4500.tag = "AFTER"
 
-		# finalCsv = getAnomaly(tTop, t4500)
+		finalCsv = getAnomaly(tTop, t4500)
 		finalCsv = "inc_tree.csv"
 		centroidIncRows["AFTER"] = []
 		nodeIncAfter = PTree("AFTER", True)
@@ -250,7 +250,6 @@ def getAnomaly(topTable, t4500):
 		# print(t4500index, len(t4500.rows))
 		if t4500index >= len(t4500.rows):
 			print("IN")
-			# get_csv("inc_final", best_left)
 			return
 
 		r_index = random.randint(0, len(t.rows)-1)
@@ -264,12 +263,8 @@ def getAnomaly(topTable, t4500):
 			cos_distance = t.cos(pivot1[1], pivot2[1], new_row500, pivot2[0], t.cols)
 			new_dist_list.append((cos_distance, new_row500))
 
-		# print("check: ", len(t4500.rows))
 		new_row = t4500.rows[t4500index]
-		# for new_row in t4500.rows:
-		# print("cols: ", t.cols)
 		cos_distance = t.cos(pivot1[1], pivot2[1], new_row, pivot2[0], t.cols)
-		# print("cost dist: ", cos_distance)
 		a = pivot1[0]
 		b = pivot2[0]
 		x = (a**2 + cos_distance**2 - b**2)/(2*cos_distance)
@@ -301,7 +296,6 @@ def getAnomaly(topTable, t4500):
 	
 	for t4500index in range(1, 4500):
 		with open("inc_tree.csv") as fs:
-			# print("hw7 print")
 			incT = Tbl()
 			incT.read(fs)
 			incT.tag = "AFTER"
