@@ -123,21 +123,21 @@ def main():
 		nodeAfter.getLeafClusters(nodeAfter)
 
 		# Calculate for incremental data
-		with open(data500) as fs, open(dataInc) as fs1:
-			tTop = Tbl()
-			tTop.read(fs)
-			tTop.tag = "AFTER"
+		# with open(data500) as fs, open(dataInc) as fs1:
+		# 	tTop = Tbl()
+		# 	tTop.read(fs)
+		# 	tTop.tag = "AFTER"
 
-			t4500 = Tbl()
-			t4500.read(fs1)
-			t4500.tag = "AFTER"
+		# 	t4500 = Tbl()
+		# 	t4500.read(fs1)
+		# 	t4500.tag = "AFTER"
 
-		finalCsv = getAnomaly(tTop, t4500)
-		finalCsv = "inc_tree.csv"
-		centroidIncRows["AFTER"] = []
-		nodeIncAfter = PTree("AFTER", True)
-		dataInc = file(finalCsv, finalCsv, 500, nodeIncAfter, "AFTER")
-		nodeIncAfter.getLeafClusters(nodeIncAfter)
+		# finalCsv = getAnomaly(tTop, t4500)
+		# finalCsv = "inc_tree.csv"
+		# centroidIncRows["AFTER"] = []
+		# nodeIncAfter = PTree("AFTER", True)
+		# dataInc = file(finalCsv, finalCsv, 500, nodeIncAfter, "AFTER")
+		# nodeIncAfter.getLeafClusters(nodeIncAfter)
 
 
 		trueTotal = 0 
@@ -160,7 +160,7 @@ def main():
 		trueTotal = trueTotal/leaf_num_runs
 		trueIncTotal = trueIncTotal/leaf_num_runs
 		finalTable.append((trueTotal, trueIncTotal))
-		print("Iteration: " + index + 1 + " ", trueTotal, trueIncTotal)
+		print("Iteration: " + str(index + 1) + " ", trueTotal, trueIncTotal)
 		baseline += trueTotal
 
 	baseline = baseline/after_num
@@ -249,7 +249,7 @@ def getAnomaly(topTable, t4500):
 	def createIncrementalTree(t, t4500index):
 		# print(t4500index, len(t4500.rows))
 		if t4500index >= len(t4500.rows):
-			print("IN")
+			# print("IN")
 			return
 
 		r_index = random.randint(0, len(t.rows)-1)
@@ -288,7 +288,7 @@ def getAnomaly(topTable, t4500):
 		for cos_dist in new_dist_list:
 			left.append(cos_dist[1].cells)
 	
-		get_csv("inc_tree", left)
+		get_csv("inc_tree.csv", left)
 		
 
 	t4500Index = 0
